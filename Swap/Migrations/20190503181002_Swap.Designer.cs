@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Swap.Data;
 
-namespace Swap.Data.Migrations
+namespace Swap.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190503181002_Swap")]
+    partial class Swap
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,7 +218,7 @@ namespace Swap.Data.Migrations
                             Category = "Clothing",
                             Description = "Cool hat in good condition",
                             Img = "https://www.bootbarn.com/dw/image/v2/BCCF_PRD/on/demandware.static/-/Sites-master-product-catalog-shp/default/dw7eaef6c3/images/648/2000232648_700_P1.JPG",
-                            UserId = "78707d2f-d7f8-48d6-aba5-9ea0c4584ee7"
+                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
                         },
                         new
                         {
@@ -224,7 +226,7 @@ namespace Swap.Data.Migrations
                             Category = "Home Appliances",
                             Description = "Mildly good condition",
                             Img = "https://images.crateandbarrel.com/is/image/Crate/EllaWhiteTableLampOffSHF15",
-                            UserId = "78707d2f-d7f8-48d6-aba5-9ea0c4584ee7"
+                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
                         },
                         new
                         {
@@ -232,7 +234,7 @@ namespace Swap.Data.Migrations
                             Category = "Clothing",
                             Description = "Awesome shirt! good condition.. it just doesnt fit",
                             Img = "https://cdn.shopify.com/s/files/1/0051/4802/products/i-octocat-code_600x600.png?v=1520399372",
-                            UserId = "78707d2f-d7f8-48d6-aba5-9ea0c4584ee7"
+                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
                         },
                         new
                         {
@@ -240,8 +242,23 @@ namespace Swap.Data.Migrations
                             Category = "Home Appliances",
                             Description = "Super awesome bowl set",
                             Img = "https://www.westelm.com/weimgs/ab/images/wcm/products/201849/0247/folk-pad-printed-bowls-c.jpg",
-                            UserId = "78707d2f-d7f8-48d6-aba5-9ea0c4584ee7"
+                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
                         });
+                });
+
+            modelBuilder.Entity("Swap.Models.Swapped", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ReceiverItemId");
+
+                    b.Property<int>("SenderItemId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Swapped");
                 });
 
             modelBuilder.Entity("Swap.Models.ApplicationUser", b =>
@@ -257,17 +274,17 @@ namespace Swap.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "78707d2f-d7f8-48d6-aba5-9ea0c4584ee7",
+                            Id = "609a10f4-daef-44ac-b647-9f8c056c55f7",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8ffe9242-7001-4aaf-ac95-fdde992d3895",
+                            ConcurrencyStamp = "9f55565d-45fe-42bf-9f9d-aeda9bd2d505",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEC0POi7bbeuWJ2cH4YRzB62IGrhSmRc3pReVgOMiwzUml0wX3DBi/6XqJI4LqYjd7A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDJvCBnoXkGFNnxEtsjdh6Z5dkEvx+GBjykr23CjG95YipBTq1UlhvF/mGqLpqHP7w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "10c2b3d8-0ebc-4278-a2f4-ba460b15853f",
+                            SecurityStamp = "6c47d7c3-1f45-4780-9147-f94faf4ef8a1",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             FirstName = "admin",

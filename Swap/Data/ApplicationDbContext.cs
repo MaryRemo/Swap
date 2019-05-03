@@ -14,13 +14,14 @@ namespace Swap.Data
             : base(options) { }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Swapped> Swapped { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
-            ApplicationUser user = new ApplicationUser
+        ApplicationUser user = new ApplicationUser
             {
                 FirstName = "admin",
                 LastName = "admin",
@@ -71,5 +72,6 @@ namespace Swap.Data
              }
         );
         }
+        public DbSet<Swap.Models.Item> Item { get; set; }     
     }
 }
