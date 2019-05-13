@@ -216,7 +216,7 @@ namespace Swap.Migrations
                             Category = "Clothing",
                             Description = "Cool hat in good condition",
                             Img = "https://www.bootbarn.com/dw/image/v2/BCCF_PRD/on/demandware.static/-/Sites-master-product-catalog-shp/default/dw7eaef6c3/images/648/2000232648_700_P1.JPG",
-                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
+                            UserId = "ae27d154-24a8-4d1d-a66b-1f849c227e47"
                         },
                         new
                         {
@@ -224,7 +224,7 @@ namespace Swap.Migrations
                             Category = "Home Appliances",
                             Description = "Mildly good condition",
                             Img = "https://images.crateandbarrel.com/is/image/Crate/EllaWhiteTableLampOffSHF15",
-                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
+                            UserId = "ae27d154-24a8-4d1d-a66b-1f849c227e47"
                         },
                         new
                         {
@@ -232,7 +232,7 @@ namespace Swap.Migrations
                             Category = "Clothing",
                             Description = "Awesome shirt! good condition.. it just doesnt fit",
                             Img = "https://cdn.shopify.com/s/files/1/0051/4802/products/i-octocat-code_600x600.png?v=1520399372",
-                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
+                            UserId = "ae27d154-24a8-4d1d-a66b-1f849c227e47"
                         },
                         new
                         {
@@ -240,7 +240,44 @@ namespace Swap.Migrations
                             Category = "Home Appliances",
                             Description = "Super awesome bowl set",
                             Img = "https://www.westelm.com/weimgs/ab/images/wcm/products/201849/0247/folk-pad-printed-bowls-c.jpg",
-                            UserId = "609a10f4-daef-44ac-b647-9f8c056c55f7"
+                            UserId = "ae27d154-24a8-4d1d-a66b-1f849c227e47"
+                        });
+                });
+
+            modelBuilder.Entity("Swap.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Datetime");
+
+                    b.Property<string>("ReceiverId");
+
+                    b.Property<string>("SenderId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Message");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Datetime = new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReceiverId = "2",
+                            SenderId = "1",
+                            Text = "Your offer has been accepted"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Datetime = new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ReceiverId = "2",
+                            SenderId = "3",
+                            Text = "Your offer has been accepted"
                         });
                 });
 
@@ -256,7 +293,25 @@ namespace Swap.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ReceiverItemId");
+
+                    b.HasIndex("SenderItemId");
+
                     b.ToTable("Swapped");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ReceiverItemId = 2,
+                            SenderItemId = 4
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ReceiverItemId = 2,
+                            SenderItemId = 4
+                        });
                 });
 
             modelBuilder.Entity("Swap.Models.ApplicationUser", b =>
@@ -272,17 +327,17 @@ namespace Swap.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "609a10f4-daef-44ac-b647-9f8c056c55f7",
+                            Id = "ae27d154-24a8-4d1d-a66b-1f849c227e47",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9f55565d-45fe-42bf-9f9d-aeda9bd2d505",
+                            ConcurrencyStamp = "cf459a30-f090-4db8-8d7d-0bc13728a04c",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDJvCBnoXkGFNnxEtsjdh6Z5dkEvx+GBjykr23CjG95YipBTq1UlhvF/mGqLpqHP7w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENwYsL6Gt0nt7ElLqLXh8dGL9hupMsDgaRYSKLOR9NU3J5t2qvKu8n4iML/Ub5TqWw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6c47d7c3-1f45-4780-9147-f94faf4ef8a1",
+                            SecurityStamp = "5538337e-32c7-4395-a661-3d3d173376bb",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             FirstName = "admin",
@@ -340,6 +395,19 @@ namespace Swap.Migrations
                     b.HasOne("Swap.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Swap.Models.Swapped", b =>
+                {
+                    b.HasOne("Swap.Models.Item", "ReceiverItem")
+                        .WithMany()
+                        .HasForeignKey("ReceiverItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Swap.Models.Item", "SenderItem")
+                        .WithMany("swappeds")
+                        .HasForeignKey("SenderItemId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

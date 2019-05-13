@@ -34,7 +34,9 @@ namespace Swap.Controllers
         // GET: AllItems
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Item.Include(i => i.User);
+            var applicationDbContext = _context.Item
+                .Include(i => i.User)
+                .Include(i => i.swappeds);
             return View(await applicationDbContext.ToListAsync());
         }
 

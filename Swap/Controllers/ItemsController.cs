@@ -155,6 +155,11 @@ namespace Swap.Controllers
             return View(item);
         }
 
+        public IActionResult DeleteFail()
+        {
+            return View();
+        }
+
         // GET: Items/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -179,10 +184,18 @@ namespace Swap.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var item = await _context.Item.FindAsync(id);
-            _context.Item.Remove(item);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+           try
+            {
+                var item = await _context.Item.FindAsync(id);
+                _context.Item.Remove(item);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+
+            catch
+            {
+                return RedirectToAction(nameof(DeleteFail));
+            }
         }
 
         private bool ItemExists(int id)
