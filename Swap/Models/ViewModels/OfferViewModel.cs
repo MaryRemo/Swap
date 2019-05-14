@@ -7,7 +7,7 @@ namespace Swap.Models.ViewModels
 {
     public class OfferViewModel
     {
-        public List<Swapped> Swappeds { get; set; }
+        public List<int> ids { get; set; }
         public List<Item> Items { get; set; }
     }
 }

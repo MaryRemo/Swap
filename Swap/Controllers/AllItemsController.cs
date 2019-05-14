@@ -34,13 +34,38 @@ namespace Swap.Controllers
         // GET: AllItems
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Item
-                .Include(i => i.User)
-                .Include(i => i.swappeds);
-            return View(await applicationDbContext.ToListAsync());
-        }
+            var user = await _userManager.GetUserAsync(User);
 
-        // GET: AllItems/Details/5
+            OfferViewModel offerViewModel = new OfferViewModel();
+
+            List<Item> ItemsList = new List<Item>();
+
+            List<int> IdList = new List<int>();
+
+            var AllItems = _context.Item
+                .Include(i => i.User);
+
+            foreach (var item in AllItems)
+            {
+                ItemsList.Add(item);
+            }
+
+            var SenderItemIds = _context.Swapped
+                .Include(s => s.SenderItem)
+                .Where(s => s.SenderItem.User.Id == user.Id || s.ReceiverItem.User.Id == user.Id);
+
+            foreach (var st in SenderItemIds)
+            {
+                IdList.Add(st.SenderItemId);
+                IdList.Add(st.ReceiverItemId);
+            }
+           
+            offerViewModel.ids = IdList; 
+            offerViewModel.Items = ItemsList;
+
+            return View(offerViewModel);
+        }
+         // GET: AllItems/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
