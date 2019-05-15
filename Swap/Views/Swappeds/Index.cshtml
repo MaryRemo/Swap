@@ -1,0 +1,120 @@
+﻿@model IEnumerable<Swap.Models.Swapped>
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+
+@{  var user = await UserManager.GetUserAsync(User);}
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+            <p>
+                <a asp-action="Create">Create New</a>
+            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SenderItem.Category)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SenderItem.Img)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SenderItem.Description)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.SenderItem.User)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+
+                        @if (item.ReceiverItem.User.Id == user.Id)
+                        {
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.Category)
+                                </td>
+                                <td>
+                                    <img width="60" src="@Html.DisplayFor(modelItem => item.SenderItem.Img)" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.User.FirstName)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.Category)
+                                </td>
+                                <td>
+                                    <img width="60" src="@Html.DisplayFor(modelItem => item.ReceiverItem.Img)" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.User.FirstName)
+                                </td>
+                                <td>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Decline</a>
+                                    <a asp-action="AcceptOffer" asp-route-id="@item.Id">Accept</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        @if (item.SenderItem.User.Id == user.Id)
+                        {
+                    <p> Pending Offers </p>
+
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.Category)
+                                </td>
+                                <td>
+                                    <img width="60" src="@Html.DisplayFor(modelItem => item.SenderItem.Img)" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SenderItem.User.FirstName)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.Category)
+                                </td>
+                                <td>
+                                    <img width="60" src="@Html.DisplayFor(modelItem => item.ReceiverItem.Img)" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.Description)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ReceiverItem.User.FirstName)
+                                </td>
+                            </tr>
+                        <td>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Cancel</a> 
+                        </td>
+                    }
+                    }
+
+
+                    </tbody>
+                </table>

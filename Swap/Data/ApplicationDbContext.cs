@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Swap.Models;
+using Swap.Models.ViewModels;
 
 namespace Swap.Data
 {
@@ -14,9 +15,20 @@ namespace Swap.Data
             : base(options) { }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Swapped> Swapped { get; set; }
+        public DbSet<Message> Message { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Item>()
+           .HasMany(o => o.swappeds)
+                .WithOne(l => l.SenderItem)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
@@ -70,6 +82,40 @@ namespace Swap.Data
                  Description = "Super awesome bowl set"
              }
         );
+            modelBuilder.Entity<Swapped>().HasData(
+           new Swapped()
+           {
+               Id = 1,
+               SenderItemId = 4,
+               ReceiverItemId = 2
+           },
+           new Swapped()
+           {
+               Id = 2,
+               SenderItemId = 4,
+               ReceiverItemId = 2
+           }
+           );
+
+            modelBuilder.Entity<Message>().HasData(
+         new Message()
+         {
+             Id = 1,
+             SenderId = "1",
+             ReceiverId = "2",
+             Text = "Your offer has been accepted",
+             Datetime = DateTime.Parse("2019-01-15"),
+         },
+         new Message()
+         {
+             Id = 2,
+             SenderId = "3",
+             ReceiverId = "2",
+             Text = "Your offer has been accepted",
+             Datetime = DateTime.Parse("2019-01-15")
+         }
+         );
         }
+        public DbSet<Swap.Models.Item> Item { get; set; }     
     }
 }

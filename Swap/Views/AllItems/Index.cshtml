@@ -1,0 +1,68 @@
+﻿@model Swap.Models.ViewModels.OfferViewModel
+
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@{ var user = await UserManager.GetUserAsync(User);}
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Index</h1>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <thead>
+            <tr>
+                <th>
+                   Title
+                </th>
+                <th>
+                   Image
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    User
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var items in Model.Items)
+            {
+
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Category)
+                    </td>
+                    <td>
+                        <img width="60" src="@Html.DisplayFor(modelItem => items.Img)" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => items.User.FirstName)
+                    </td>
+                    @if (!Model.ids.Contains(items.Id)) 
+                        {
+                        @if (items.UserId != user.Id)
+                            {
+
+                        <td>
+                            <a asp-action="CreateSwap" asp-route-id="@items.Id">Offer</a>
+                        </td>
+                    }
+                            }
+                </tr>
+
+            }
+        </tbody>
+    </table>

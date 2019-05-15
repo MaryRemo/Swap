@@ -1,0 +1,70 @@
+﻿@model Swap.Models.Swapped
+
+@{
+    ViewData["Title"] = "AcceptOffer";
+}
+
+<h1>Are you sure you would like to accept the offer?</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AcceptOffer">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+               
+                <input type="hidden" asp-for="SenderItem.UserId" class="form-control" />
+                <span asp-validation-for="SenderItem.UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+               
+                <input type="hidden" asp-for="ReceiverItem.UserId" class="form-control" />
+                <span asp-validation-for="ReceiverItem.UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="SenderItemId" class="form-control" />
+                <span asp-validation-for="SenderItemId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ReceiverItemId" class="form-control" />
+                <span asp-validation-for="ReceiverItemId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ReceiverItem.Img" class="form-control" />
+                <span asp-validation-for="ReceiverItem.Img" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="SenderItem.Img" class="form-control" />
+                <span asp-validation-for="SenderItem.Img" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ReceiverItem.Category" class="form-control" />
+                <span asp-validation-for="ReceiverItem.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="SenderItem.Category" class="form-control" />
+                <span asp-validation-for="SenderItem.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="ReceiverItem.Description" class="form-control" />
+                <span asp-validation-for="ReceiverItem.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden"asp-for="SenderItem.Description" class="form-control" />
+                <span asp-validation-for="SenderItem.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Accept" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

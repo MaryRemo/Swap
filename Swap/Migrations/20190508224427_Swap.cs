@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Swap.Data.Migrations
+namespace Swap.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class Swap : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,11 +40,30 @@ namespace Swap.Data.Migrations
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false)
+                    AccessFailedCount = table.Column<int>(nullable: false),
+                    Discriminator = table.Column<string>(nullable: false),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Message",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Text = table.Column<string>(nullable: true),
+                    Datetime = table.Column<DateTime>(nullable: false),
+                    SenderId = table.Column<string>(nullable: true),
+                    ReceiverId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Message", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,6 +172,90 @@ namespace Swap.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Item",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Category = table.Column<string>(nullable: true),
+                    Img = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Item", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Item_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Swapped",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    SenderItemId = table.Column<int>(nullable: false),
+                    ReceiverItemId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Swapped", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Swapped_Item_ReceiverItemId",
+                        column: x => x.ReceiverItemId,
+                        principalTable: "Item",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Swapped_Item_SenderItemId",
+                        column: x => x.SenderItemId,
+                        principalTable: "Item",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "FirstName", "LastName" },
+                values: new object[] { "ae27d154-24a8-4d1d-a66b-1f849c227e47", 0, "cf459a30-f090-4db8-8d7d-0bc13728a04c", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAENwYsL6Gt0nt7ElLqLXh8dGL9hupMsDgaRYSKLOR9NU3J5t2qvKu8n4iML/Ub5TqWw==", null, false, "5538337e-32c7-4395-a661-3d3d173376bb", false, "admin@admin.com", "admin", "admin" });
+
+            migrationBuilder.InsertData(
+                table: "Message",
+                columns: new[] { "Id", "Datetime", "ReceiverId", "SenderId", "Text" },
+                values: new object[] { 1, new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "2", "1", "Your offer has been accepted" });
+
+            migrationBuilder.InsertData(
+                table: "Message",
+                columns: new[] { "Id", "Datetime", "ReceiverId", "SenderId", "Text" },
+                values: new object[] { 2, new DateTime(2019, 1, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "2", "3", "Your offer has been accepted" });
+
+            migrationBuilder.InsertData(
+                table: "Item",
+                columns: new[] { "Id", "Category", "Description", "Img", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "Clothing", "Cool hat in good condition", "https://www.bootbarn.com/dw/image/v2/BCCF_PRD/on/demandware.static/-/Sites-master-product-catalog-shp/default/dw7eaef6c3/images/648/2000232648_700_P1.JPG", "ae27d154-24a8-4d1d-a66b-1f849c227e47" },
+                    { 2, "Home Appliances", "Mildly good condition", "https://images.crateandbarrel.com/is/image/Crate/EllaWhiteTableLampOffSHF15", "ae27d154-24a8-4d1d-a66b-1f849c227e47" },
+                    { 3, "Clothing", "Awesome shirt! good condition.. it just doesnt fit", "https://cdn.shopify.com/s/files/1/0051/4802/products/i-octocat-code_600x600.png?v=1520399372", "ae27d154-24a8-4d1d-a66b-1f849c227e47" },
+                    { 4, "Home Appliances", "Super awesome bowl set", "https://www.westelm.com/weimgs/ab/images/wcm/products/201849/0247/folk-pad-printed-bowls-c.jpg", "ae27d154-24a8-4d1d-a66b-1f849c227e47" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Swapped",
+                columns: new[] { "Id", "ReceiverItemId", "SenderItemId" },
+                values: new object[] { 1, 2, 4 });
+
+            migrationBuilder.InsertData(
+                table: "Swapped",
+                columns: new[] { "Id", "ReceiverItemId", "SenderItemId" },
+                values: new object[] { 2, 2, 4 });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -191,6 +294,21 @@ namespace Swap.Data.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Item_UserId",
+                table: "Item",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Swapped_ReceiverItemId",
+                table: "Swapped",
+                column: "ReceiverItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Swapped_SenderItemId",
+                table: "Swapped",
+                column: "SenderItemId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -211,7 +329,16 @@ namespace Swap.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Message");
+
+            migrationBuilder.DropTable(
+                name: "Swapped");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Item");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
